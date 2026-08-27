@@ -1,0 +1,44 @@
+# ======================
+# 1. FICHIERS SENSIBLES
+# ======================
+.env
+.env.local
+.env.production
+
+# ===============================
+# 2. PYTHON & VIRTUAL ENVIRONMENT
+# ===============================
+__pycache__/
+*.py[cod]
+*.so
+venv/
+.venv/
+env/
+*.egg-info/
+dist/
+build/
+
+# ======================
+# 3. NODE.JS / FRONTEND
+# ======================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ====================
+# 4. VISUAL PARADIGM 
+# ====================
+*.vpp
+.vpprefdata/
+*.vpp~*
+*.bak
+*.lock
+
+# ==============================
+# 5. FICHIERS SYSTÈME & EDITEURS
+# ==============================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
