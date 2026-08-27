@@ -1,0 +1,16 @@
+pandas==2.2.2
+numpy==1.26.4
+python-dotenv==1.0.1
+sqlalchemy==2.0.30
+psycopg2-binary==2.9.9
+pytest==8.2.2
+pylint==3.2.2
+fastapi
+uvicorn
+pydantic
+scipy==1.13.0
+xgboost
+scikit-learn
+statsmodels
+joblib
+matplotlib
