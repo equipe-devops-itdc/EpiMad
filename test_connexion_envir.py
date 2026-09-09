@@ -1,5 +1,5 @@
 """
-Script de test pour vérifier la connexion Python <-> PostgreSQL (Docker).
+Script de test pour vérifier la connexion Python - PostgreSQL (Docker).
 """
 
 from ETL.commun.database import engine
