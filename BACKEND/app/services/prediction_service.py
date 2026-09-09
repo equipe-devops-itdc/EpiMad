@@ -67,10 +67,9 @@ class PredictionService:
         if df_disease.empty:
             raise ValueError(f"Aucune donnée trouvée pour: {disease}")
         
-        # Preprocessing
         df_ml = prepare_for_xgboost(df_disease, create_lags=True, remove_first_lag_rows=True)
         
-        # Trouver la dernière semaine valide
+        
         weekly_totals = df_ml.groupby(["annee", "semaine"])["cas_nouveaux"].sum()
         MIN_CASES_THRESHOLD = 100 if disease == "Peste" else 1000
         

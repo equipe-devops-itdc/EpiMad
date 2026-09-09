@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routers import cas, maladies, regions, stats, predictions
+from app.routers import cas, maladies, regions, stats, predictions, historique, alertes, comparatif, import_data
+from app.routers.arima_predictions import router as arima_predictions_router
 
 app = FastAPI(
     title="EpiMad API",
@@ -22,6 +23,11 @@ app.include_router(maladies.router)
 app.include_router(regions.router)
 app.include_router(stats.router)
 app.include_router(predictions.router)
+app.include_router(historique.router)
+app.include_router(alertes.router)
+app.include_router(arima_predictions_router)
+app.include_router(comparatif.router)
+app.include_router(import_data.router)
 
 @app.get("/", tags=["Root"])
 def read_root():

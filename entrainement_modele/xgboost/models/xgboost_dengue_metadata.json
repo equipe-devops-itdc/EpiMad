@@ -1,0 +1,29 @@
+{
+    "features": [
+        "region_id",
+        "maladie_id",
+        "annee",
+        "mois",
+        "semaine",
+        "trimestre",
+        "mois_sin",
+        "mois_cos",
+        "semaine_sin",
+        "semaine_cos",
+        "cas_lag_1",
+        "cas_lag_2",
+        "cas_lag_4",
+        "cas_lag_8",
+        "moyenne_4sem",
+        "moyenne_8sem",
+        "var_moyenne_4sem",
+        "var_moyenne_8sem",
+        "tendance",
+        "tendance_normalisee",
+        "est_pic",
+        "mois_region",
+        "spec_saison_pluies",
+        "spec_saison_seche"
+    ],
+    "target": "cas_nouveaux"
+}
