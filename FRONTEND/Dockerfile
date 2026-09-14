@@ -1,4 +1,4 @@
-# Stage 1: Build de l'application React / Vite avec Node.js 20+
+# Stage 1: Build de l'application React / Vite
 FROM node:20-alpine AS builder
 
 WORKDIR /app
@@ -17,4 +17,3 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
-Rédiger
