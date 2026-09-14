@@ -7,10 +7,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# Copie requirements.txt depuis la racine du projet
 COPY requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
-COPY . /app/
+# Copie le contenu du dossier BACKEND dans /app
+COPY BACKEND/ /app/
 
 EXPOSE 8000
 
