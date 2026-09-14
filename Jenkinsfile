@@ -34,23 +34,23 @@ pipeline {
                     sh label: 'Création du fichier .env', script: '''
                         cat <<EOF > "${WORKSPACE}/.env"
 POSTGRES_HOST=db
-POSTGRES_PORT=${CRED_POSTGRES_PORT}
-POSTGRES_USER=${CRED_POSTGRES_USER}
-POSTGRES_PASSWORD=${CRED_POSTGRES_PASSWORD}
+POSTGRES_PORT=${CRED_POSTGRES_PORT:-5432}
+POSTGRES_USER=${CRED_POSTGRES_USER:-postgres}
+POSTGRES_PASSWORD=${CRED_POSTGRES_PASSWORD:-postgres}
 POSTGRES_DB=epimad_db
 
-DATABASE_URL=postgresql://${CRED_POSTGRES_USER}:${CRED_POSTGRES_PASSWORD}@db:5432/epimad_db
+DATABASE_URL=postgresql://${CRED_POSTGRES_USER:-postgres}:${CRED_POSTGRES_PASSWORD:-postgres}@db:5432/epimad_db
 
-ADMIN_EMAIL=${CRED_ADMIN_EMAIL}
-ADMIN_PASSWORD=${CRED_ADMIN_PASSWORD}
+ADMIN_EMAIL=${CRED_ADMIN_EMAIL:-admin@epimad.com}
+ADMIN_PASSWORD=${CRED_ADMIN_PASSWORD:-admin123}
 
-# ---- FRONTEND ----
+# ---- FRONTEND (5173) ----
 DOCKEROPT_FRONTEND_CONTAINER_NAME=epimad_frontend
-FRONTEND_HOST_PORT=3000
+FRONTEND_HOST_PORT=5173
 
-# ---- BACKEND ----
+# ---- BACKEND (8000) ----
 DOCKEROPT_BACKEND_CONTAINER_NAME=epimad_backend
-BACKEND_HOST_PORT=5000
+BACKEND_HOST_PORT=8000
 EOF
                         chmod 600 "${WORKSPACE}/.env"
                     '''
@@ -60,13 +60,17 @@ EOF
 
         stage('Validation Compose') {
             steps {
-                sh label: 'Vérification syntaxe docker compose', script: 'docker compose --env-file .env config'
+                sh label: 'Vérification syntaxe docker compose', script: '''
+                    docker compose --env-file .env config
+                '''
             }
         }
 
         stage('Build Images') {
             steps {
-                sh label: 'Build des conteneurs', script: 'docker compose --env-file .env build'
+                sh label: 'Build des conteneurs', script: '''
+                    docker compose --env-file .env build --no-cache
+                '''
             }
         }
 
@@ -76,11 +80,14 @@ EOF
                     for p in "5173" "8000" "5050" "5432"; do
                         cids=$(docker ps -aq --filter "publish=$p")
                         if [ -n "$cids" ]; then
+                            echo "Nettoyage du conteneur occupant le port $p"
                             docker rm -f $cids || true
                         fi
                     done
                 '''
-                sh label: 'Déploiement des services', script: 'docker compose --env-file .env up -d --force-recreate --remove-orphans'
+                sh label: 'Déploiement des services', script: '''
+                    docker compose --env-file .env up -d --force-recreate --remove-orphans
+                '''
             }
         }
 
@@ -96,7 +103,7 @@ EOF
 
     post {
         failure {
-            sh label: 'Récupération des logs', script: '''
+            sh label: 'Récupération des logs en cas d\'erreur', script: '''
                 if [ -f .env ]; then
                     docker compose --env-file .env logs --tail=100 || true
                 fi
