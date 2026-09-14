@@ -25,7 +25,7 @@ pipeline {
         stage('Génération Configuration') {
             steps {
                 withCredentials([
-                    string(credentialsId: 'POSTGRES_PORT_ID', variable: 'CRED_POSTGRES_PORT'),
+                    string(credentialsId: 'POSTGRES_PORT_EPIMAD_ID', variable: 'CRED_POSTGRES_PORT'),
                     string(credentialsId: 'POSTGRES_USER_ID', variable: 'CRED_POSTGRES_USER'),
                     string(credentialsId: 'POSTGRES_PASSWORD_ID', variable: 'CRED_POSTGRES_PASSWORD'),
                     string(credentialsId: 'DOCKEROPT_ADMIN_EMAIL_ID', variable: 'CRED_ADMIN_EMAIL'),
@@ -34,7 +34,7 @@ pipeline {
                     sh label: 'Création du fichier .env', script: '''
                         cat <<EOF > "${WORKSPACE}/.env"
 POSTGRES_HOST=db
-POSTGRES_PORT=${CRED_POSTGRES_PORT:-5432}
+POSTGRES_PORT=${CRED_POSTGRES_PORT:-5437}
 POSTGRES_USER=${CRED_POSTGRES_USER:-postgres}
 POSTGRES_PASSWORD=${CRED_POSTGRES_PASSWORD:-postgres}
 POSTGRES_DB=epimad_db
@@ -77,7 +77,7 @@ EOF
         stage('Deploy') {
             steps {
                 sh label: 'Libération des ports avant déploiement', script: '''
-                    for p in "5173" "8000" "5050" "5432"; do
+                    for p in "5173" "8000" "5050" "5437"; do
                         cids=$(docker ps -aq --filter "publish=$p")
                         if [ -n "$cids" ]; then
                             echo "Nettoyage du conteneur occupant le port $p"
