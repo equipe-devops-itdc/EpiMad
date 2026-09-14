@@ -74,7 +74,7 @@ EOF
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy Services') {
             steps {
                 sh label: 'Libération des ports avant déploiement', script: '''
                     for p in "5173" "8000" "5050" "5437"; do
@@ -85,8 +85,28 @@ EOF
                         fi
                     done
                 '''
-                sh label: 'Déploiement des services', script: '''
+                sh label: 'Démarrage des services', script: '''
                     docker compose --env-file .env up -d --force-recreate --remove-orphans
+                '''
+            }
+        }
+
+        stage('Database Migration') {
+            steps {
+                sh label: 'Exécution automatique de la migration SQL', script: '''
+                    # Attente que PostgreSQL réponde sur le réseau
+                    echo "Attente de l'initialisation de PostgreSQL..."
+                    until docker exec epimad_postgres pg_isready -U postgres -d epimad_db; do
+                        sleep 2
+                    done
+
+                    # Application du schéma ou script de migration si disponible
+                    if [ -f "./database/schema.sql" ]; then
+                        echo "Application du script database/schema.sql..."
+                        docker exec -i epimad_postgres psql -U postgres -d epimad_db < ./database/schema.sql
+                    else
+                        echo "Aucun fichier schema.sql trouvé, passage de l'étape."
+                    fi
                 '''
             }
         }
@@ -94,7 +114,7 @@ EOF
         stage('Health Check') {
             steps {
                 sh label: 'Vérification de l\'état des conteneurs', script: '''
-                    sleep 10
+                    sleep 5
                     docker compose --env-file .env ps
                 '''
             }
