@@ -14,6 +14,14 @@ RUN pip install --no-cache-dir -r /app/requirements.txt
 # Copie le contenu du dossier BACKEND dans /app
 COPY BACKEND/ /app/
 
+# Copie les modules Python custom situés à la racine du projet
+COPY entrainement_modele/ /app/entrainement_modele/
+COPY ETL/ /app/ETL/
+
+# Permet les imports "nus" comme `from database import ...`
+# en plus des imports qualifiés comme `from entrainement_modele.database import ...`
+ENV PYTHONPATH="/app/app:/app:${PYTHONPATH}"
+
 EXPOSE 8000
 
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
