@@ -34,6 +34,7 @@ export default function Accueil() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-emerald-600 via-teal-600 to-blue-700 text-white py-20 overflow-hidden">
         <div className="absolute inset-0 opacity-10">
@@ -70,7 +71,6 @@ export default function Accueil() {
         </div>
       </section>
 
-      
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-center text-slate-800 mb-12">

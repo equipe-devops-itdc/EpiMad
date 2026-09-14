@@ -118,7 +118,7 @@ async def import_and_train(
 
         db.commit()
 
-        # 4. DÉCLENCHEMENT de l'entraînement automatique du modèle ARIMA et XGBoost
+        # DÉCLENCHEMENT de l'entraînement automatique du modèle ARIMA et XGBoost
         ia_status = "ARIMA prêt immédiatement. "
         try:
             script_path = os.path.join(os.path.dirname(__file__), "../../entrainement_modele/train_xgboost.py")
